@@ -8,7 +8,8 @@
   margin: 2px;
   border: none;
   padding: 4px 8px;
-  background-color: lightcyan;
+  background-color: whitesmoke;
+  border-bottom: 3px solid darkgray;
   display: inline-block;
 }
 
@@ -82,4 +83,26 @@
 
 .login-scope input:checked ~ .login-scope-check {
   background-color: darkblue;
+}
+
+.login-scope-check:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.login-scope input:checked ~ .login-scope-check:after {
+  display: block;
+}
+
+.login-scope .login-scope-check:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
 }
