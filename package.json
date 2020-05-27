@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon -e js,jsx ./bin/www",
-    "start": "NODE_ENV=production node ./bin/www"
+    "start": "NODE_ENV=production node ./bin/www",
+    "pwhash": "node ./bin/pwhash"
   },
   "babel": {
     "presets": [
@@ -58,6 +59,7 @@
   },
   "homepage": "https://github.com/wasv/indieauth-ep#readme",
   "dependencies": {
+    "argon2": "^0.26.2",
     "cookie-parser": "^1.4.5",
     "csurf": "^1.11.0",
     "dotenv": "^8.2.0",
