@@ -39,14 +39,18 @@ router.get("/", csrfProtection, (req, res) => {
   if (req.query.scope) {
     scopes = req.query.scope.split(" ");
   }
-  res.render("auth", {
-    me: process.env.ME,
-    scopes: scopes,
-    client_id: req.query.client_id,
-    redirect_uri: req.query.redirect_uri,
-    state: req.query.state,
-    csrfToken: req.csrfToken(),
-  });
+  if (req.query.client_id && req.query.redirect_uri && req.query.state) {
+    res.render("auth", {
+      me: process.env.ME,
+      scopes: scopes,
+      client_id: req.query.client_id,
+      redirect_uri: req.query.redirect_uri,
+      state: req.query.state,
+      csrfToken: req.csrfToken(),
+    });
+  } else {
+    res.send("Missing parameters.").status(400);
+  }
 });
 
 router.post("/verify", csrfProtection, async (req, res) => {
