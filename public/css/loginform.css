@@ -1,0 +1,85 @@
+.login-form {
+  margin: auto;
+  max-width: 500px;
+  display: block;
+}
+
+.login-info {
+  margin: 2px;
+  border: none;
+  padding: 4px 8px;
+  background-color: lightcyan;
+  display: inline-block;
+}
+
+.login-field {
+  transition-duration: 0.4s;
+  margin: 2px;
+  border: none;
+  width: 200px;
+  border-bottom: 3px solid darkgray;
+  display: inline-block;
+}
+
+.login-field:focus {
+  border-bottom: 3px solid darkblue;
+}
+
+.login-button {
+  transition-duration: 0.4s;
+  display: inline-block;
+  padding: 8px 16px;
+
+  border: 2pt solid darkblue;
+  background-color: white;
+  color: darkblue;
+}
+
+.login-button[disabled] {
+  border: 2pt solid transparent;
+  background-color: lightgray;
+  color: black;
+}
+
+.login-button:not([disabled]):hover {
+  background-color: darkblue;
+  color: white;
+}
+
+.login-scopes {
+  min-width: 200px;
+  white-space: nowrap;
+}
+
+.login-scope {
+  cursor: default;
+  display: block;
+  position: relative;
+  margin: auto;
+  padding: 2px;
+  padding-left: 35px;
+  height: 24px;
+}
+
+.login-scope input {
+  position: absolute;
+  opacity: 0;
+  height: 0;
+  width: 0;
+}
+
+.login-scope input ~ .login-scope-check {
+  background-color: lightgray;
+
+  transition-duration: 0.4s;
+  border-radius: 5px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 24px;
+  width: 24px;
+}
+
+.login-scope input:checked ~ .login-scope-check {
+  background-color: darkblue;
+}

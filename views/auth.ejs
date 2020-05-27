@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Authorize Application</title>
+        <link rel="stylesheet" type="text/css" href="/static/css/index.css" />
+        <link rel="stylesheet" type="text/css" href="/static/css/loginform.css" />
+    </head>
+    <body>
+        <form method="POST" class="login-form" action=".">
+            <h1>Authorize Application</h1>
+            <div>You are attempting to login with client </div>
+            <div class="login-info"><%= client_id %></div>
+            <div>After login you will be redirected to </div>
+            <div class="login-info"><%= redirect_uri %></div>
+            <% if (scopes.length) {%>
+            <div>It is requesting the following scopes, uncheck any you do not wish to grant:</div>
+            <fieldset class="login-scopes">
+                <legend>Scopes</legend>
+                <% scopes.forEach((scope) => { %>
+                <label class="login-scope" for="scope_<%= scope%>">
+                    <input id="scope_<%= scope%>" type="checkbox" name="scopes[]" value="<%= scope%>" checked>
+                    <span class="login-scope-check"></span>
+                    <%= scope %>
+                </label>
+                <% }) %>
+            </fieldset>
+            <% } %>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div>
+                <label>Your ID: </label>
+                <span class="login-info"><%= me %></span>
+            </div>
+            <div>
+                <label for="password">Password: </label>
+                <input class="login-field" type="password" name="password" id="password" />
+            </div>
+            <div>
+                <input class="login-button" class="submit" type="submit" value="Submit" />
+            </div>
+        </form>
+    </body>
+</html>
