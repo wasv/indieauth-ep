@@ -13,8 +13,6 @@ RUN npm install
 # Bundle app source
 COPY . .
 
-RUN npm run build
-
-ENV USER_DOMAIN http://invalid-user.example.org
+ENV ME http://localhost
 EXPOSE 8080
 CMD ["npm", "start"]

@@ -9,7 +9,7 @@
         <link rel="stylesheet" type="text/css" href="/static/css/loginform.css" />
     </head>
     <body>
-        <form method="POST" class="login-form" action=".">
+        <form method="POST" class="login-form" action="/auth/verify">
             <h1>Authorize Application</h1>
             <div>You are attempting to login with client </div>
             <div class="login-info"><%= client_id %></div>
@@ -29,6 +29,9 @@
             </fieldset>
             <% } %>
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <input type="hidden" name="client_id" value="<%= client_id %>">
+            <input type="hidden" name="redirect_uri" value="<%= redirect_uri %>">
+            <input type="hidden" name="state" value="<%= state %>">
             <div>
                 <label>Your ID: </label>
                 <span class="login-info"><%= me %></span>
