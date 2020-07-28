@@ -39,49 +39,62 @@ router.get("/", csrfProtection, (req, res) => {
   if (req.query.scope) {
     scopes = req.query.scope.split(" ");
   }
-  if (req.query.client_id && req.query.redirect_uri && req.query.state) {
-    res.render("auth", {
-      me: process.env.ME,
-      scopes: scopes,
-      client_id: req.query.client_id,
-      redirect_uri: req.query.redirect_uri,
-      state: req.query.state,
-      csrfToken: req.csrfToken(),
-    });
-  } else {
+  if (!req.query.client_id || !req.query.redirect_uri || !req.query.state) {
     res.send("Missing parameters.").status(400);
+    return;
   }
+  res.render("auth", {
+    me: process.env.ME,
+    scopes: scopes,
+    client_id: req.query.client_id,
+    redirect_uri: req.query.redirect_uri,
+    state: req.query.state,
+    csrfToken: req.csrfToken(),
+  });
 });
 
 router.post("/verify", csrfProtection, async (req, res) => {
   try {
-    if (await argon2.verify(process.env.PW_HASH, req.body.password)) {
-      const message =
-        process.env.ME + req.body.redirect_uri + req.body.client_id;
-      const code = create_code(message, "");
-
-      const rd_url = new URL(
-        "?" + qs.stringify({ state: req.body.state, code }),
-        req.body.redirect_uri
-      );
-
-      res.redirect(rd_url.toString());
-    } else {
+    if ((await argon2.verify(process.env.PW_HASH, req.body.password)) != true) {
       res.sendStatus(401);
+      return;
     }
   } catch (err) {
-    console.log("ERR: " + err);
+    console.error("ERR: " + err);
     res.status(500);
+    return;
   }
+
+  const message = process.env.ME + req.body.redirect_uri + req.body.client_id;
+
+  let scopes = "";
+  if (req.body.scope) {
+    scopes = req.body.scope.join(" ");
+  }
+
+  const code = create_code(message, scopes);
+
+  const rd_url = new URL(
+    "?" + qs.stringify({ state: req.body.state, code }),
+    req.body.redirect_uri
+  );
+
+  res.redirect(rd_url.toString());
 });
 
 router.post("/", (req, res) => {
   const message = process.env.ME + req.body.redirect_uri + req.body.client_id;
-  if (req.body.code && verify_code(message, req.body.code)) {
-    res.json({ me: process.env.ME });
-  } else {
+  if (!req.body.code || !verify_code(message, req.body.code)) {
     res.send("Invalid Code.").status(400);
+    return;
   }
+
+  let auth_resp = { me: process.env.ME };
+
+  const scopes = req.body.code.split("$")[2];
+  if (scopes) auth_resp.scope = scopes;
+
+  res.json(auth_resp);
 });
 
 export default router;
